@@ -24,10 +24,11 @@ public class Mine : MonoBehaviour
         while (inside)
         {
             float timer = 0f;
-            while (timer < resource.collectTime)
+            float duration = resource.collectTime * ResourceManager.instance.GetCollectTimeMultiplier();
+            while (timer < duration)
             {
                 timer += Time.deltaTime;
-                progressBar.SetProgress(timer / resource.collectTime);
+                progressBar.SetProgress(timer / duration);
                 yield return null;
             }
 
@@ -41,6 +42,12 @@ public class Mine : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!other.CompareTag("Player")) return;
+
+        if (!resource.unlocked)
+        {
+            Debug.Log($"{resource.type} isn't unlocked yet!");
+            return;
+        }
 
         inside = true;
 
