@@ -24,7 +24,12 @@ public class ShopItem : MonoBehaviour
     
     private void Update()
     {
-        button.interactable = CanAfford();
+        bool interactable = CanAfford();
+        if (isUnlock)
+        {
+            interactable = !ResourceManager.instance.GetResource(rewardType).unlocked && CanAfford();
+        }
+        button.interactable = interactable;
     }
 
     private void OnClick()
